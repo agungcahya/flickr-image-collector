@@ -2,6 +2,7 @@ package com.spring.project.flickrimagecollector.service;
 
 import com.spring.project.flickrimagecollector.entity.FeedEntity;
 import com.spring.project.flickrimagecollector.repository.FeedRepository;
+import javassist.NotFoundException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -55,9 +56,8 @@ public class FlickrService {
         return feedRepository.saveAll(feedEntityList);
     }
 
-    public FeedEntity getByAuhtorId(String authorId) {
-        Optional<FeedEntity> feedEntity = feedRepository.findByAuthorId(authorId);
-        return feedEntity.orElse(null);
+    public Optional<FeedEntity> getByAuhtorId(String authorId) {
+        return feedRepository.findByAuthorId(authorId);
     }
 
     public List<FeedEntity> getListFeed(String author, String authorId, String title, String tags) {
