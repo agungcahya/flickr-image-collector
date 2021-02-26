@@ -23,7 +23,7 @@ public class FlickrService {
 
     private JSONParser jsonParser = new JSONParser();
 
-    public String pullFeeds(String id, String ids, String tags, String tagmode) throws ParseException {
+    public List<FeedEntity> pullFeeds(String id, String ids, String tags, String tagmode) throws ParseException {
         RestTemplate restTemplate = new RestTemplate();
         List<FeedEntity> feedEntityList = new ArrayList<>();
         String flickrFeedUrl = "https://www.flickr.com/services/feeds/photos_public.gne";
@@ -52,8 +52,7 @@ public class FlickrService {
                     .title(feedObject.get("title").toString())
                     .build());
         });
-        feedRepository.saveAll(feedEntityList);
-        return response.getBody();
+        return feedRepository.saveAll(feedEntityList);
     }
 
     public FeedEntity getByAuhtorId(String authorId) {
@@ -65,5 +64,14 @@ public class FlickrService {
         List<FeedEntity> feedEntityList;
         feedEntityList = feedRepository.getListFeed(author, authorId, title, tags);
         return feedEntityList;
+    }
+
+    public String deleteAllFeed() {
+        feedRepository.deleteAll();
+        if(feedRepository.findAll().isEmpty()) {
+            return "Deleted";
+        } else {
+            return "Deleted Failed";
+        }
     }
 }

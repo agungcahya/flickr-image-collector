@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/flickr-feed")
 public class FlickrController {
@@ -16,19 +18,24 @@ public class FlickrController {
     @Autowired
     private FlickrService flickrService;
 
-    @GetMapping("/pull")
-    public ResponseEntity<String> pullFeed(@RequestParam @Nullable String id, String ids, String tags, String tagmode) throws ParseException {
+    @PostMapping("/pull")
+    public ResponseEntity<List<FeedEntity>> pullFeed(@RequestParam @Nullable String id, String ids, String tags, String tagmode) throws ParseException {
         return ResponseEntity.ok(flickrService.pullFeeds(id, ids, tags, tagmode));
     }
 
     @GetMapping("/author")
-    public ResponseEntity getFeedByAuthorId(@RequestParam String authorId) {
+    public ResponseEntity<FeedEntity> getFeedByAuthorId(@RequestParam String authorId) {
         return ResponseEntity.ok(flickrService.getByAuhtorId(authorId));
     }
 
     @GetMapping("/feeds")
-    public ResponseEntity getListFeed(@RequestParam @Nullable String author, String authorId, String title, String tags) {
+    public ResponseEntity<List<FeedEntity>> getListFeed(@RequestParam @Nullable String author, String authorId, String title, String tags) {
         return ResponseEntity.ok(flickrService.getListFeed(author, authorId, title, tags));
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity deleteAllFeed() {
+        return ResponseEntity.ok(flickrService.deleteAllFeed());
     }
 
 }
