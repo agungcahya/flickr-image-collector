@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FlickrService {
@@ -46,5 +47,16 @@ public class FlickrService {
         });
         feedRepository.saveAll(feedEntityList);
         return response.getBody();
+    }
+
+    public FeedEntity getByAuhtorId(String authorId) {
+        Optional<FeedEntity> feedEntity = feedRepository.findByAuthorId(authorId);
+        return feedEntity.orElse(null);
+    }
+
+    public List<FeedEntity> getListFeed(String author, String authorId, String title, String tags) {
+        List<FeedEntity> feedEntityList;
+        feedEntityList = feedRepository.getListFeed(author, authorId, title, tags);
+        return feedEntityList;
     }
 }

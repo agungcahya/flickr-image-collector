@@ -1,15 +1,14 @@
 package com.spring.project.flickrimagecollector.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @Entity
