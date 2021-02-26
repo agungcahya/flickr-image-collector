@@ -17,8 +17,8 @@ public class FlickrController {
     private FlickrService flickrService;
 
     @GetMapping("/pull")
-    public ResponseEntity<String> pullFeed() throws ParseException {
-        return ResponseEntity.ok(flickrService.pullFeeds());
+    public ResponseEntity<String> pullFeed(@RequestParam @Nullable String id, String ids, String tags, String tagmode) throws ParseException {
+        return ResponseEntity.ok(flickrService.pullFeeds(id, ids, tags, tagmode));
     }
 
     @GetMapping("/author")

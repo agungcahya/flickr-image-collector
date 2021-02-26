@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.json.simple.JSONObject;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FlickrService {
@@ -23,11 +23,18 @@ public class FlickrService {
 
     private JSONParser jsonParser = new JSONParser();
 
-    public String pullFeeds() throws ParseException {
+    public String pullFeeds(String id, String ids, String tags, String tagmode) throws ParseException {
         RestTemplate restTemplate = new RestTemplate();
         List<FeedEntity> feedEntityList = new ArrayList<>();
-        String fooResourceUrl = "https://www.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=?";
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+        String flickrFeedUrl = "https://www.flickr.com/services/feeds/photos_public.gne";
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(flickrFeedUrl)
+                .queryParam("id", id)
+                .queryParam("ids", ids)
+                .queryParam("tags", tags)
+                .queryParam("tagmode", tagmode)
+                .queryParam("format", "json")
+                .queryParam("nojsoncallback", 1);
+        ResponseEntity<String> response = restTemplate.getForEntity(uriBuilder.toUriString(), String.class);
         JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
         JSONArray feedJson = (JSONArray) jsonObject.get("items");
 
